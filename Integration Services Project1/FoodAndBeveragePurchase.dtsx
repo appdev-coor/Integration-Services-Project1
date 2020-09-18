@@ -1,0 +1,1755 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="3/19/2019 9:25:07 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="ACOVMN02SQLDW"
+  DTS:CreatorName="NETWORK\c1803049"
+  DTS:DTSID="{C4627751-82DE-455E-A6BA-6B546CB6F26D}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1100.123"
+  DTS:LocaleID="1053"
+  DTS:ObjectName="FoodAndBeveragePurchase"
+  DTS:PackageType="5"
+  DTS:VersionBuild="78"
+  DTS:VersionGUID="{CE208B87-B499-4DBF-9AE6-9C53ABF347E1}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[ACOVMN02SQLDW.CDW_File]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{0B691C87-05F5-4951-A47B-5B64DB85BAA4}"
+      DTS:ObjectName="ACOVMN02SQLDW.CDW_File">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Project::CDW_File_ConnectionString]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=ACOVMN01SQLDW;Initial Catalog=CDW_File;Provider=SQLNCLI11;Integrated Security=SSPI;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[ErrorLog.txt]"
+      DTS:CreationName="FLATFILE"
+      DTS:DTSID="{6F245D77-E565-47A4-A1F5-F138856D93DA}"
+      DTS:ObjectName="ErrorLog.txt">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:Format="Delimited"
+          DTS:LocaleID="1053"
+          DTS:HeaderRowDelimiter="_x000D__x000A_"
+          DTS:ColumnNamesInFirstDataRow="True"
+          DTS:RowDelimiter=""
+          DTS:TextQualifier="_x003C_none_x003E_"
+          DTS:CodePage="1252"
+          DTS:ConnectionString="Z:\prod\error\ErrorFile.txt">
+          <DTS:FlatFileColumns>
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x000D__x000A_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="129"
+              DTS:TextQualified="True"
+              DTS:ObjectName="ErrorDescr"
+              DTS:DTSID="{8211EAD8-975B-4A71-ABE4-A9CA6E580685}"
+              DTS:CreationName="" />
+          </DTS:FlatFileColumns>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[PurchaseFile]"
+      DTS:CreationName="EXCEL"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{4F74AEB5-E568-417B-AF94-31708F9D27CC}"
+      DTS:ObjectName="PurchaseFile">
+      <DTS:PropertyExpression
+        DTS:Name="ExcelFilePath">@[User::PickUpFolder]+ @[User::FileName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\;Extended Properties=&quot;EXCEL 12.0 XML;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{26D026B8-ACA5-483C-85F3-3C823ED86980}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="ErrorFile">
+      <DTS:VariableValue
+        DTS:DataType="8">\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\Error\ErrorFile.txt</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{54A894AD-14FF-4CF7-A153-04257722E04A}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="ErrorFileExists">
+      <DTS:VariableValue
+        DTS:DataType="11">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{F9B7B8CC-120C-43D8-BA3E-5EC0ACD4620C}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="ErrorLogFolder">
+      <DTS:VariableValue
+        DTS:DataType="8">\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\Error\</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{56AF75D6-E89D-46F9-873A-2FC54981BA6A}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="ExcelFileName">
+      <DTS:VariableValue
+        DTS:DataType="8">\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\Rådata rapport - 201801.xlsx</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{D9F3872E-0032-4FA3-B25B-90BA29E540FA}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{33EF8A9C-A20D-4C70-A845-DE9B51BBCCB2}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileNameHandler">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{B828010A-0CF5-47F0-B4CA-B1CE1AD456B2}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="HistoryFolder">
+      <DTS:VariableValue
+        DTS:DataType="8">\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\Archive\</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{20750B6F-06CB-44BD-974D-FEEBDE0A470B}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="PickUpFolder">
+      <DTS:VariableValue
+        DTS:DataType="8">\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Purchase Table"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{DA4A0DEF-AEA7-40D6-855B-7956E20830FF}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Purchase Table">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{E5CC59CE-1FA3-445A-AB31-AC21BF98166F}"
+        DTS:ObjectName="{0B1D977E-EAD4-4157-8D6E-E48E98518E61}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::PickUpFolder]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\" />
+            <FEFEProperty
+              FileSpec="Rådata rapport -*.xlsx" />
+            <FEFEProperty
+              FileNameRetrievalType="1" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Table\Load FileNameHandler table"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:Disabled="True"
+          DTS:DTSID="{3912694A-396E-4E98-AC54-82F430E4A96F}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Load FileNameHandler table"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{0B691C87-05F5-4951-A47B-5B64DB85BAA4}"
+              SQLTask:SqlStatementSource="insert into FoodAndBeverageSource.FileNameHandler(SourceFileName) values (?)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::FileName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Table\Load Purchase files into Table"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:DelayValidation="True"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{30FFE7C3-DD70-4CCD-B1B2-F9CCFDB141F9}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Load Purchase files into Table"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="Add PurchaseSource"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output].Columns[PurchaseSource]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="13"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output].Columns[PurchaseSource]"
+                          name="PurchaseSource"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">"MartinServera"</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">"MartinServera"</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output].Columns[CoorCompany]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="2"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output].Columns[CoorCompany]"
+                          name="CoorCompany"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">"02"</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">"02"</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File"
+                  componentClassID="Microsoft.ExcelSource"
+                  contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Excel Source"
+                  name="Purchase Raw File"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [Rådata rapport - månad$A3:AF200000] where [Kund Id] is not null
+and
+len(fsg)&gt;0</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mapping from parameters in the SQL command to variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[PurchaseFile]"
+                      connectionManagerRefId="Package.ConnectionManagers[PurchaseFile]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output]"
+                      name="Excel Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fsg]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Fsg]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fsg]"
+                          name="Fsg"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Alkoholskatt]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Alkoholskatt]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Alkoholskatt]"
+                          name="Alkoholskatt"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Antal fsgenheter]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Antal fsgenheter]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Antal fsgenheter]"
+                          name="Antal fsgenheter"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Antal kg/lit]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Antal kg/lit]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Antal kg/lit]"
+                          name="Antal kg/lit"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fsg miljömärkt]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Fsg miljömärkt]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fsg miljömärkt]"
+                          name="Fsg miljömärkt"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Kund ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Kund ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Kund ID]"
+                          name="Kund ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Kund Kundnamn]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Kund Kundnamn]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Kund Kundnamn]"
+                          name="Kund Kundnamn"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev gatuadr ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev gatuadr ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev gatuadr ID]"
+                          name="Lev gatuadr ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev postnr ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev postnr ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev postnr ID]"
+                          name="Lev postnr ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev ort ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev ort ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev ort ID]"
+                          name="Lev ort ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fakt månad ID]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Fakt månad ID]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fakt månad ID]"
+                          name="Fakt månad ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev datum ID]"
+                          dataType="date"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev datum ID]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev datum ID]"
+                          name="Lev datum ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Artikel ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Artikel ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Artikel ID]"
+                          name="Artikel ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Artikel DESC]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Artikel DESC]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Artikel DESC]"
+                          name="Artikel DESC"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Varumärke ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Varumärke ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Varumärke ID]"
+                          name="Varumärke ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Urspr land art reg DESC]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Urspr land art reg DESC]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Urspr land art reg DESC]"
+                          name="Urspr land art reg DESC"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Enhet försäljning DESC]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Enhet försäljning DESC]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Enhet försäljning DESC]"
+                          name="Enhet försäljning DESC"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Nettokg fsg enhet ID]"
+                          dataType="r8"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Nettokg fsg enhet ID]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Nettokg fsg enhet ID]"
+                          name="Nettokg fsg enhet ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Delleverantör DESC]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Delleverantör DESC]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Delleverantör DESC]"
+                          name="Delleverantör DESC"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Miljöanpassad ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Miljöanpassad ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Miljöanpassad ID]"
+                          name="Miljöanpassad ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Ekologisk ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Ekologisk ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Ekologisk ID]"
+                          name="Ekologisk ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Krav ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Krav ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Krav ID]"
+                          name="Krav ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Svanen ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Svanen ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Svanen ID]"
+                          name="Svanen ID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktslag DESC]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Produktslag DESC]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktslag DESC]"
+                          name="Produktslag DESC"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktområde DESC]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Produktområde DESC]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktområde DESC]"
+                          name="Produktområde DESC"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktgrupp DESC]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Produktgrupp DESC]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktgrupp DESC]"
+                          name="Produktgrupp DESC"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Anbudsvara vid fsg J/N ID]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Anbudsvara vid fsg J/N ID]"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Anbudsvara vid fsg J/N ID]"
+                          name="Anbudsvara vid fsg J/N ID"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Fsg]"
+                          dataType="r8"
+                          name="Fsg" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Alkoholskatt]"
+                          dataType="r8"
+                          name="Alkoholskatt" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Antal fsgenheter]"
+                          dataType="r8"
+                          name="Antal fsgenheter" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Antal kg/lit]"
+                          dataType="r8"
+                          name="Antal kg/lit" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Fsg miljömärkt]"
+                          dataType="r8"
+                          name="Fsg miljömärkt" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Kund ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Kund ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Kund Kundnamn]"
+                          dataType="wstr"
+                          length="255"
+                          name="Kund Kundnamn" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev gatuadr ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Lev gatuadr ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev postnr ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Lev postnr ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev ort ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Lev ort ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Fakt månad ID]"
+                          dataType="r8"
+                          name="Fakt månad ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Lev datum ID]"
+                          dataType="date"
+                          name="Lev datum ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Artikel ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Artikel ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Artikel DESC]"
+                          dataType="wstr"
+                          length="255"
+                          name="Artikel DESC" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Varumärke ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Varumärke ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Urspr land art reg DESC]"
+                          dataType="wstr"
+                          length="255"
+                          name="Urspr land art reg DESC" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Enhet försäljning DESC]"
+                          dataType="wstr"
+                          length="255"
+                          name="Enhet försäljning DESC" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Nettokg fsg enhet ID]"
+                          dataType="r8"
+                          name="Nettokg fsg enhet ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Delleverantör DESC]"
+                          dataType="wstr"
+                          length="255"
+                          name="Delleverantör DESC" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Miljöanpassad ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Miljöanpassad ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Ekologisk ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Ekologisk ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Krav ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Krav ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Svanen ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Svanen ID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Produktslag DESC]"
+                          dataType="wstr"
+                          length="255"
+                          name="Produktslag DESC" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Produktområde DESC]"
+                          dataType="wstr"
+                          length="255"
+                          name="Produktområde DESC" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Produktgrupp DESC]"
+                          dataType="wstr"
+                          length="255"
+                          name="Produktgrupp DESC" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].ExternalColumns[Anbudsvara vid fsg J/N ID]"
+                          dataType="wstr"
+                          length="255"
+                          name="Anbudsvara vid fsg J/N ID" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output]"
+                      isErrorOut="true"
+                      name="Excel Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Kund ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Kund ID]"
+                          name="Kund ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Kund Kundnamn]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Kund Kundnamn]"
+                          name="Kund Kundnamn" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev gatuadr ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev gatuadr ID]"
+                          name="Lev gatuadr ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev postnr ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev postnr ID]"
+                          name="Lev postnr ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev ort ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev ort ID]"
+                          name="Lev ort ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Fakt månad ID]"
+                          dataType="r8"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Fakt månad ID]"
+                          name="Fakt månad ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev datum ID]"
+                          dataType="date"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Lev datum ID]"
+                          name="Lev datum ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Artikel ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Artikel ID]"
+                          name="Artikel ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Artikel DESC]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Artikel DESC]"
+                          name="Artikel DESC" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Varumärke ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Varumärke ID]"
+                          name="Varumärke ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Urspr land art reg DESC]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Urspr land art reg DESC]"
+                          name="Urspr land art reg DESC" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Enhet försäljning DESC]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Enhet försäljning DESC]"
+                          name="Enhet försäljning DESC" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Nettokg fsg enhet ID]"
+                          dataType="r8"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Nettokg fsg enhet ID]"
+                          name="Nettokg fsg enhet ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Produktslag DESC]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Produktslag DESC]"
+                          name="Produktslag DESC" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Produktområde DESC]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Produktområde DESC]"
+                          name="Produktområde DESC" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Produktgrupp DESC]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Produktgrupp DESC]"
+                          name="Produktgrupp DESC" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Delleverantör DESC]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Delleverantör DESC]"
+                          name="Delleverantör DESC" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Miljöanpassad ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Miljöanpassad ID]"
+                          name="Miljöanpassad ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Ekologisk ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Ekologisk ID]"
+                          name="Ekologisk ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Krav ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Krav ID]"
+                          name="Krav ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Svanen ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Svanen ID]"
+                          name="Svanen ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Anbudsvara vid fsg J/N ID]"
+                          dataType="wstr"
+                          length="255"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Anbudsvara vid fsg J/N ID]"
+                          name="Anbudsvara vid fsg J/N ID" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Fsg]"
+                          dataType="r8"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Fsg]"
+                          name="Fsg" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Alkoholskatt]"
+                          dataType="r8"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Alkoholskatt]"
+                          name="Alkoholskatt" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Antal fsgenheter]"
+                          dataType="r8"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Antal fsgenheter]"
+                          name="Antal fsgenheter" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Antal kg/lit]"
+                          dataType="r8"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Antal kg/lit]"
+                          name="Antal kg/lit" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Fsg miljömärkt]"
+                          dataType="r8"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[Fsg miljömärkt]"
+                          name="Fsg miljömärkt" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="Purchase Table"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[FoodAndBeverageSource].[Purchase]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[ACOVMN02SQLDW.CDW_File]"
+                      connectionManagerRefId="Package.ConnectionManagers[ACOVMN02SQLDW.CDW_File]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Fsg]"
+                          cachedDataType="r8"
+                          cachedName="Fsg"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[FSG]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fsg]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[PurchaseSource]"
+                          cachedDataType="wstr"
+                          cachedLength="13"
+                          cachedName="PurchaseSource"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[PurchaseSource]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output].Columns[PurchaseSource]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[CoorCompany]"
+                          cachedDataType="wstr"
+                          cachedLength="2"
+                          cachedName="CoorCompany"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[CoorCompany]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output].Columns[CoorCompany]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Kund ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Kund ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[CustomerId]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Kund ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Kund Kundnamn]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Kund Kundnamn"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[CustomerName]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Kund Kundnamn]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Lev gatuadr ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Lev gatuadr ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryAddress]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev gatuadr ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Lev postnr ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Lev postnr ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryPostalCode]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev postnr ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Lev ort ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Lev ort ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryTown]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev ort ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Fakt månad ID]"
+                          cachedDataType="r8"
+                          cachedName="Fakt månad ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[InvoiceMonth]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fakt månad ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Lev datum ID]"
+                          cachedDataType="date"
+                          cachedName="Lev datum ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryDate]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Lev datum ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Artikel ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Artikel ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ArticleNumber]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Artikel ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Artikel DESC]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Artikel DESC"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ArticleDesc]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Artikel DESC]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Varumärke ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Varumärke ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[BrandId]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Varumärke ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Urspr land art reg DESC]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Urspr land art reg DESC"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[LandOfOrigin]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Urspr land art reg DESC]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Enhet försäljning DESC]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Enhet försäljning DESC"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[UnitOfSell]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Enhet försäljning DESC]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Nettokg fsg enhet ID]"
+                          cachedDataType="r8"
+                          cachedName="Nettokg fsg enhet ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[NetKGUnitId]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Nettokg fsg enhet ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Produktslag DESC]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Produktslag DESC"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ProductItemDesc]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktslag DESC]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Produktområde DESC]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Produktområde DESC"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ProductAreaDesc]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktområde DESC]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Produktgrupp DESC]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Produktgrupp DESC"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ProductGroupDesc]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Produktgrupp DESC]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Delleverantör DESC]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Delleverantör DESC"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[PartSupplierDesc]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Delleverantör DESC]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Miljöanpassad ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Miljöanpassad ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[EnvironmentCustomizedId]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Miljöanpassad ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Ekologisk ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Ekologisk ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[EcoId]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Ekologisk ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Krav ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Krav ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[RequirementId]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Krav ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Svanen ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Svanen ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[SvanenId]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Svanen ID]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Alkoholskatt]"
+                          cachedDataType="r8"
+                          cachedName="Alkoholskatt"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AlcoTax]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Alkoholskatt]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Antal fsgenheter]"
+                          cachedDataType="r8"
+                          cachedName="Antal fsgenheter"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AmountOfFSGUnits]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Antal fsgenheter]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Antal kg/lit]"
+                          cachedDataType="r8"
+                          cachedName="Antal kg/lit"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AmountKGLIT]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Antal kg/lit]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Fsg miljömärkt]"
+                          cachedDataType="r8"
+                          cachedName="Fsg miljömärkt"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[FSGEnvironmentMarket]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Fsg miljömärkt]" />
+                        <inputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].Columns[Anbudsvara vid fsg J/N ID]"
+                          cachedDataType="wstr"
+                          cachedLength="255"
+                          cachedName="Anbudsvara vid fsg J/N ID"
+                          externalMetadataColumnId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AgreementItemFSGID]"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output].Columns[Anbudsvara vid fsg J/N ID]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[PurchaseID]"
+                          dataType="i4"
+                          name="PurchaseID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[CustomerId]"
+                          dataType="wstr"
+                          length="255"
+                          name="CustomerId" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[PurchaseSource]"
+                          dataType="wstr"
+                          length="255"
+                          name="PurchaseSource" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[CustomerName]"
+                          dataType="wstr"
+                          length="255"
+                          name="CustomerName" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryAddress]"
+                          dataType="wstr"
+                          length="255"
+                          name="DeliveryAddress" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryPostalCode]"
+                          dataType="wstr"
+                          length="255"
+                          name="DeliveryPostalCode" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryTown]"
+                          dataType="wstr"
+                          length="255"
+                          name="DeliveryTown" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[InvoiceMonth]"
+                          dataType="wstr"
+                          length="255"
+                          name="InvoiceMonth" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryDate]"
+                          dataType="wstr"
+                          length="255"
+                          name="DeliveryDate" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ArticleNumber]"
+                          dataType="wstr"
+                          length="255"
+                          name="ArticleNumber" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ArticleDesc]"
+                          dataType="wstr"
+                          length="500"
+                          name="ArticleDesc" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[BrandId]"
+                          dataType="wstr"
+                          length="255"
+                          name="BrandId" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[LandOfOrigin]"
+                          dataType="wstr"
+                          length="255"
+                          name="LandOfOrigin" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[UnitOfSell]"
+                          dataType="wstr"
+                          length="255"
+                          name="UnitOfSell" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[NetKGUnitId]"
+                          dataType="wstr"
+                          length="255"
+                          name="NetKGUnitId" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ProductItemDesc]"
+                          dataType="wstr"
+                          length="500"
+                          name="ProductItemDesc" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ProductAreaDesc]"
+                          dataType="wstr"
+                          length="500"
+                          name="ProductAreaDesc" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[ProductGroupDesc]"
+                          dataType="wstr"
+                          length="500"
+                          name="ProductGroupDesc" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[PartSupplierDesc]"
+                          dataType="wstr"
+                          length="255"
+                          name="PartSupplierDesc" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[EnvironmentCustomizedId]"
+                          dataType="wstr"
+                          length="255"
+                          name="EnvironmentCustomizedId" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[EcoId]"
+                          dataType="wstr"
+                          length="255"
+                          name="EcoId" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[RequirementId]"
+                          dataType="wstr"
+                          length="255"
+                          name="RequirementId" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[SvanenId]"
+                          dataType="wstr"
+                          length="255"
+                          name="SvanenId" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AgreementItemFSGID]"
+                          dataType="wstr"
+                          length="255"
+                          name="AgreementItemFSGID" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[FSG]"
+                          dataType="wstr"
+                          length="255"
+                          name="FSG" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AlcoTax]"
+                          dataType="wstr"
+                          length="255"
+                          name="AlcoTax" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AmountOfFSGUnits]"
+                          dataType="wstr"
+                          length="255"
+                          name="AmountOfFSGUnits" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[AmountKGLIT]"
+                          dataType="wstr"
+                          length="255"
+                          name="AmountKGLIT" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[FSGEnvironmentMarket]"
+                          dataType="wstr"
+                          length="255"
+                          name="FSGEnvironmentMarket" />
+                        <externalMetadataColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input].ExternalColumns[CoorCompany]"
+                          dataType="wstr"
+                          length="20"
+                          name="CoorCompany" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Load Purchase Table\Load Purchase files into Table.Paths[Derived Column Output]"
+                  endId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table.Inputs[OLE DB Destination Input]"
+                  name="Derived Column Output"
+                  startId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Outputs[Derived Column Output]" />
+                <path
+                  refId="Package\Load Purchase Table\Load Purchase files into Table.Paths[Excel Source Output]"
+                  endId="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource.Inputs[Derived Column Input]"
+                  name="Excel Source Output"
+                  startId="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File.Outputs[Excel Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Table\ReplaceCommas"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{B01894FD-2ADC-457C-840C-BE44FD667AAB}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="ReplaceCommas"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{0B691C87-05F5-4951-A47B-5B64DB85BAA4}"
+              SQLTask:SqlStatementSource="update [FoodAndBeverageSource].[Purchase]&#xA;set [NetKGUnitId] = replace([NetKGUnitId],',','.'),&#xA;[FSG] = replace([FSG],',','.'),&#xA;[AlcoTax]=replace([AlcoTax],',','.'),&#xA;[AmountOfFSGUnits] = replace([AmountOfFSGUnits],',','.'),&#xA;[AmountKGLIT]=replace([AmountKGLIT],',','.'),&#xA;[FSGEnvironmentMarket]=replace([FSGEnvironmentMarket],',','.')" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Table\Truncate FileHandler table"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{9F19BBED-8C55-4092-9A69-6FAA545EC719}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate FileHandler table"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{0B691C87-05F5-4951-A47B-5B64DB85BAA4}"
+              SQLTask:SqlStatementSource="Truncate Table ActioSource.FileNameHandler" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Purchase Table.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{0FF2C3FF-84BB-47D0-B39E-6F091F4BEB78}"
+          DTS:From="Package\Load Purchase Table\Load FileNameHandler table"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Load Purchase Table\Load Purchase files into Table" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Purchase Table.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{645F3BBB-23D4-4306-AED3-C9C1CA9293D4}"
+          DTS:From="Package\Load Purchase Table\Load Purchase files into Table"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\Load Purchase Table\Truncate FileHandler table" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Purchase Table.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{1CE4825D-C64D-434F-9EDA-7E0213257F2A}"
+          DTS:From="Package\Load Purchase Table\Truncate FileHandler table"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\Load Purchase Table\ReplaceCommas" />
+      </DTS:PrecedenceConstraints>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{A0264AFE-66FC-4EFA-95BE-545CF5409CFD}"
+          DTS:ObjectName="{A0264AFE-66FC-4EFA-95BE-545CF5409CFD}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FileName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Purchase"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{7B67D352-E5CB-458F-AD5B-617D4D739DD2}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Purchase"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{0B691C87-05F5-4951-A47B-5B64DB85BAA4}"
+          SQLTask:SqlStatementSource="Truncate Table FoodAndBeverageSource.Purchase&#xA;Go" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{5D038890-4434-4F49-9203-772F51EFFE3D}"
+      DTS:From="Package\Truncate Purchase"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Load Purchase Table" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="211,42"
+          Id="Package\Load Purchase Table\Load FileNameHandler table"
+          TopLeft="33,21" />
+        <NodeLayout
+          Size="197,42"
+          Id="Package\Load Purchase Table\Load Purchase files into Table"
+          TopLeft="67,99.6" />
+        <NodeLayout
+          Size="156,42"
+          Id="Package\Load Purchase Table\ReplaceCommas"
+          TopLeft="88,267" />
+        <NodeLayout
+          Size="203,42"
+          Id="Package\Load Purchase Table\Truncate FileHandler table"
+          TopLeft="61,181" />
+        <EdgeLayout
+          Id="Package\Load Purchase Table.PrecedenceConstraints[Constraint]"
+          TopLeft="138.6,62.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="26.8,37"
+              Start="0,0"
+              End="26.8,29.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,14.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,14.5"
+                    Point2="0,18.5"
+                    Point3="4,18.5" />
+                  <mssgle:LineSegment
+                    End="22.8,18.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="22.8,18.5"
+                    Point2="26.8,18.5"
+                    Point3="26.8,22.5" />
+                  <mssgle:LineSegment
+                    End="26.8,29.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Purchase Table.PrecedenceConstraints[Constraint 1]"
+          TopLeft="164,141.2">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,39.8"
+              Start="0,0"
+              End="0,32.3">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,32.3" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Purchase Table.PrecedenceConstraints[Constraint 2]"
+          TopLeft="164.25,223">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44"
+              Start="0,0"
+              End="0,36.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,36.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="346,379"
+          Size="346,422"
+          Id="Package\Load Purchase Table"
+          TopLeft="60,357" />
+        <NodeLayout
+          Size="167,42"
+          Id="Package\Truncate Purchase"
+          TopLeft="92,185" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="175.5,227">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="57.5,130"
+              Start="0,0"
+              End="57.5,122.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,61" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,61"
+                    Point2="0,65"
+                    Point3="4,65" />
+                  <mssgle:LineSegment
+                    End="53.5,65" />
+                  <mssgle:CubicBezierSegment
+                    Point1="53.5,65"
+                    Point2="57.5,65"
+                    Point3="57.5,69" />
+                  <mssgle:LineSegment
+                    End="57.5,122.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Load Purchase Table\Load Purchase files into Table">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="156,42"
+          Id="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table"
+          TopLeft="585,323" />
+        <NodeLayout
+          Size="175,42"
+          Id="Package\Load Purchase Table\Load Purchase files into Table\Add PurchaseSource"
+          TopLeft="520,197" />
+        <NodeLayout
+          Size="171,42"
+          Id="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File"
+          TopLeft="522,42" />
+        <EdgeLayout
+          Id="Package\Load Purchase Table\Load Purchase files into Table.Paths[Excel Source Output]"
+          TopLeft="607.5,84">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,113"
+              Start="0,0"
+              End="0,105.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,105.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Purchase Table\Load Purchase files into Table.Paths[Derived Column Output]"
+          TopLeft="607.5,239">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="55.5,84"
+              Start="0,0"
+              End="55.5,76.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,38" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,38"
+                    Point2="0,42"
+                    Point3="4,42" />
+                  <mssgle:LineSegment
+                    End="51.5,42" />
+                  <mssgle:CubicBezierSegment
+                    Point1="51.5,42"
+                    Point2="55.5,42"
+                    Point3="55.5,46" />
+                  <mssgle:LineSegment
+                    End="55.5,76.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Purchase Table\Load Purchase files into Table\Purchase Table">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Purchase Table\Load Purchase files into Table\Purchase Raw File">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="3/29/2019 2:29:58 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="ACOVMN02SQLDW"
+  DTS:CreatorName="NETWORK\c1803049"
+  DTS:DTSID="{7A69BE04-80E7-4F66-B772-B7A54DA45CB8}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1100.123"
+  DTS:LocaleID="1053"
+  DTS:ObjectName="Zip and Archive"
+  DTS:PackageType="5"
+  DTS:VersionBuild="19"
+  DTS:VersionGUID="{6E1C5CE7-698E-4826-8B88-027B73AD2372}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Rådata rapport - 201902.xlsx]"
+      DTS:CreationName="FILE"
+      DTS:DTSID="{7D5F1269-A994-4E22-914F-2E167398A185}"
+      DTS:ObjectName="Rådata rapport - 201902.xlsx">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[User::PickUpFolderRoot]+ @[User::FileName]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{70FF0BC1-03E9-4890-ABFB-C08F5D13AC3A}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FileName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{722BE33A-3FC0-4F10-BA28-2350E80C08A4}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="HistoryFolder">
+      <DTS:VariableValue
+        DTS:DataType="8">\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\Archive\</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{08CABEA9-E68B-43C5-9A08-EECE63265690}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="PickUpFolderRoot">
+      <DTS:VariableValue
+        DTS:DataType="8">\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Zip and Archive"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{A87D08F6-8D16-4A71-92D4-C23342AF8625}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Zip and Archive">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{BA1E64AD-35F8-4ACE-99A5-84CEB21C9193}"
+        DTS:ObjectName="{BA1E64AD-35F8-4ACE-99A5-84CEB21C9193}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::PickUpFolderRoot]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\" />
+            <FEFEProperty
+              FileSpec="*.xlsx" />
+            <FEFEProperty
+              FileNameRetrievalType="1" />
+            <FEFEProperty
+              Recurse="0" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Zip and Archive\Delete Files"
+          DTS:CreationName="Microsoft.FileSystemTask"
+          DTS:Description="File System Task"
+          DTS:DTSID="{DB2D6947-65AC-4CD3-A0C3-43BE91A2C4BB}"
+          DTS:ExecutableType="Microsoft.FileSystemTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Delete Files"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <FileSystemData
+              TaskOperationType="DeleteFile"
+              TaskSourcePath="{7D5F1269-A994-4E22-914F-2E167398A185}" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Zip and Archive\Zip and Archive"
+          DTS:CreationName="Microsoft.ExecuteProcess"
+          DTS:Description="Execute Process Task"
+          DTS:DTSID="{AB47E942-2239-408B-A962-6FBF62AF91E0}"
+          DTS:ExecutableType="Microsoft.ExecuteProcess"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Zip and Archive"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:PropertyExpression
+            DTS:Name="Arguments">"a -t7z \""+@[User::HistoryFolder]+@[User::FileName]+".zip" + "\"  \"" + @[User::PickUpFolderRoot]+@[User::FileName] +"\""</DTS:PropertyExpression>
+          <DTS:ObjectData>
+            <ExecuteProcessData
+              Executable="C:\Program Files\7-Zip\7z.exe"
+              Arguments="a -t7z &quot;\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\Archive\.zip&quot;  &quot;\\COORFILER03\cdw-import\excelfiles\MartinServera\prod\&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Zip and Archive.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{8512A37C-4EFF-4324-9607-B628C0B56A6E}"
+          DTS:From="Package\Zip and Archive\Zip and Archive"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Zip and Archive\Delete Files" />
+      </DTS:PrecedenceConstraints>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{D5F43412-9218-4E64-A290-E31237B8998C}"
+          DTS:ObjectName="{D5F43412-9218-4E64-A290-E31237B8998C}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::FileName" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="137,42"
+          Id="Package\Zip and Archive\Delete Files"
+          TopLeft="49,109" />
+        <NodeLayout
+          Size="155,42"
+          Id="Package\Zip and Archive\Zip and Archive"
+          TopLeft="38,15" />
+        <EdgeLayout
+          Id="Package\Zip and Archive.PrecedenceConstraints[Constraint]"
+          TopLeft="116.5,57">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,52"
+              Start="0,0"
+              End="0,44.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,44.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="301,248"
+          Size="301,291"
+          Id="Package\Zip and Archive"
+          TopLeft="426,214" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
